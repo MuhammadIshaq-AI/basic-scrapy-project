@@ -11,13 +11,33 @@ BOT_NAME = 'basic_scrapy_spider'
 
 SPIDER_MODULES = ['basic_scrapy_spider.spiders']
 NEWSPIDER_MODULE = 'basic_scrapy_spider.spiders'
+# In your settings.py or settings.py file
+RETRY_HTTP_CODES = [503]
+RETRY_TIMES = 5
+
+def retry_delay(retry_count, response):
+    return 5 * retry_count  # Increase the delay linearly with each retry
+
+RETRY_BACKOFF_MAX = 60  # Set a maximum delay between retries
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'quotes_js_scraper (+http://www.yourdomain.com)'
+
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
+
+# In your settings.py or settings.py file
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy_user_agents.middlewares.RandomUserAgentMiddleware': 400,
+}
+custom_settings = {
+    'DOWNLOAD_DELAY': 1.5,  # Sleep for 1.5 seconds between requests
+}
+
+
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
